@@ -78,6 +78,99 @@ void Remove(int col){
 		}
 	}	
 }
+int count2s(char c){
+	// Horizontal
+	int count=0;
+	for(int i=1;i<=6;i++){
+		for(int j=1;j<=6;j++){
+			if(j>1 && board[i][j-1]=='_' && board[i][j]==c && board[i][j+1]==c){
+				count++;
+			}
+			else if(j<6 && board[i][j]==c && board[i][j+1]==c && board[i][j+2]=='_'){
+				count++;
+			}
+		}
+	}
+
+	// Vertical
+	for(int j=1;j<=7;j++){
+		for(int i=2;i<=5;i++){
+			if(board[i-1][j]=='_' && board[i][j]==c && board[i+1][j]==c){
+				count++;
+			}
+		}
+	}
+
+	// Diagonal
+	for(int i=1;i<=5;i++){
+		for(int j=1;j<=6;j++){
+			if(j>1 && i>1 && board[i-1][j-1]=='_' && board[i][j]==c && board[i+1][j+1]==c){
+				count++;
+			}
+			else if(j<6 && i<5 && board[i][j]==c && board[i+1][j+1]==c && board[i+2][j+2]=='_'){
+				count++;
+			}
+		}
+	}
+	for(int i=1;i<=5;i++){
+		for(int j=7;j>=2;j--){
+			if(j<7 && i>1 && board[i-1][j+1]=='_' && board[i][j]==c && board[i+1][j-1]==c){
+				count++;
+			}
+			else if(j>2 && i<5 && board[i][j]==c && board[i+1][j-1]==c && board[i+2][j-2]=='_'){
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+int count3s(char c){
+	// Horizontal
+	int count=0;
+	for(int i=1;i<=6;i++){
+		for(int j=1;j<=5;j++){
+			if(j>1 && board[i][j-1]=='_' && board[i][j]==c && board[i][j+1]==c && board[i][j+2]){
+				count++;
+			}
+			else if(j<5 && board[i][j]==c && board[i][j+1]==c && board[i][j+2]==c && board[i][j+3]=='_'){
+				count++;
+			}
+		}
+	}
+
+	// Vertical
+	for(int j=1;j<=7;j++){
+		for(int i=2;i<=4;i++){
+			if(board[i-1][j]=='_' && board[i][j]==c && board[i+1][j]==c && board[i+2][j]==c){
+				count++;
+			}
+		}
+	}
+
+	// Diagonal
+	for(int i=1;i<=4;i++){
+		for(int j=1;j<=5;j++){
+			if(j>1 && i>1 && board[i-1][j-1]=='_' && board[i][j]==c && board[i+1][j+1]==c && board[i+2][j+2]==c){
+				count++;
+			}
+			else if(j<5 && i<4 && board[i][j]==c && board[i+1][j+1]==c && board[i+2][j+2]==c && board[i+3][j+3]=='_'){
+				count++;
+			}
+		}
+	}
+	for(int i=1;i<=4;i++){
+		for(int j=7;j>=3;j--){
+			if(j<7 && i>1 && board[i-1][j+1]=='_' && board[i][j]==c && board[i+1][j-1]==c && board[i+2][j-2]==c){
+				count++;
+			}
+			else if(j>3 && i<4 && board[i][j]==c && board[i+1][j-1]==c && board[i+2][j-2]==c && board[i+3][j-3]=='_'){
+				count++;
+			}
+		}
+	}
+	return count;
+}
 int minimax(int depth, char c, int alpha, int beta){
 	if(wins(maximiser)){
 		return 100-depth;
@@ -90,7 +183,7 @@ int minimax(int depth, char c, int alpha, int beta){
 	}
 
 	if(depth>=MAXDEPTH){
-		return 0;
+		return 5*(count2s(maximiser)-count2s(minimiser))+10*(count3s(maximiser)-count3s(minimiser));
 	}
 
 	int curbest, value;
@@ -161,7 +254,7 @@ int main(){
 	printf("Select your difficulty level\n1. Easy\n2. Pro\n3. Impossible\n");
 	printf("Enter Your choice: \n");
 	scanf("%d", &ch);
-	MAXDEPTH=3+3*ch;
+	MAXDEPTH=4 + 2*ch;
 	
 	// Selecting Turns
 	printf("Do you want to go first?\nPress 1 if yes\n0 otherwise\n\n");
